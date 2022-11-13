@@ -7,6 +7,7 @@ import com.yll.servlet.constant.Constant;
 import com.yll.servlet.util.StringUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
@@ -62,8 +63,11 @@ public class FileServlet extends BaseServlet {
 				if (StringUtils.isNullOrEmpty(item.getFieldName())) {
 					continue;
 				}
-				String dest = realPath(Constant.UPLOAD + Constant.SPLASH + UUID.fastUUID() + Constant.SPLASH + FileUtil
-						.getName(item.getName()));
+				String name = FileUtil.getName(item.getName());
+				String type = item.getName().substring(item.getName().indexOf(".")+1);
+				String dest = realPath(Constant.UPLOAD + Constant.SPLASH + UUID.fastUUID() + Constant.SPLASH + name);
+				System.out.printf("%s：%s", name, type);
+				System.out.println();
 				FileUtil.writeFromStream(item.getInputStream(), new File(dest));
 				msg = "文件上传成功";
 				item.delete();
